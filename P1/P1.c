@@ -8,9 +8,11 @@ long int mergesort(vector vec, int start, int stop);
 
 int main(void) {
   FILE *file;
-
   char buffer[BUFFSIZE];
   vector nums;
+  long int inversions;
+  long int start, end;
+
   vectorinit(&nums);
 
   fileprompt(buffer);
@@ -18,9 +20,25 @@ int main(void) {
   fileread(file, &nums);
   fclose(file);
 
-  long int start = timems();
-  long int inversions = solutiondivideandconquer(nums);
-  long int end = timems();
+  printf("file found!\n");
+
+  option options[] = {
+      {"b", "brute force"},
+      {"d", "divide and conquer"},
+  };
+
+  start = timems();
+  switch (optionprompt(2, options)) {
+    case 0:
+      printf("brute force started\n");
+      inversions = solutionbruteforce(nums);
+      break;
+    case 1:
+      printf("divide and conquer started\n");
+      inversions = solutiondivideandconquer(nums);
+      break;
+  }
+  end = timems();
 
   printf("Elapsed=%ldms Inversions=%ld\n", end - start, inversions);
 

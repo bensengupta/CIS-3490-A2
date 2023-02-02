@@ -9,6 +9,10 @@ typedef struct vector {
   unsigned long int *nums;
 } vector;
 
+typedef char *option[2];
+
+unsigned int optionprompt(unsigned int count, option *options);
+
 void readline(char buffer[BUFFSIZE]);
 void fileprompt(char buffer[BUFFSIZE]);
 void fileopen(char filename[BUFFSIZE], FILE **fp);

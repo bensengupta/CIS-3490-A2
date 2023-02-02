@@ -1,6 +1,7 @@
 #include "P1utils.h"
 
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +13,7 @@ void readline(char buffer[BUFFSIZE]) {
 }
 
 void fileprompt(char buffer[BUFFSIZE]) {
-  printf("file: ");
+  printf("filename:\n> ");
   readline(buffer);
 }
 
@@ -31,6 +32,27 @@ void fileread(FILE *file, vector *vec) {
   int x;
   while (fscanf(file, "%d", &x) == 1) {
     vectoradd(vec, x);
+  }
+}
+
+unsigned int optionprompt(unsigned int count, option *options) {
+  for (int i = 0; i < count; i++) {
+    printf("[%s] %s\n", options[i][0], options[i][1]);
+  }
+
+  char buffer[BUFFSIZE];
+
+  while (true) {
+    printf("> ");
+    readline(buffer);
+
+    for (unsigned int i = 0; i < count; i++) {
+      if (strcmp(buffer, options[i][0]) == 0) {
+        return i;
+      }
+    }
+
+    printf("error: invalid input, try again\n");
   }
 }
 
@@ -75,4 +97,4 @@ void vectorprint(vector vec) {
   printf("debug: size %d\n", vec.size);
 }
 
-long int timems() { return clock() / (CLOCKS_PER_SEC / 1000); }
+long int timems() { return (1000 * clock()) / CLOCKS_PER_SEC; }
