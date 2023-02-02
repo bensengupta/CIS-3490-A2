@@ -1,4 +1,4 @@
-#include "P1utils.h"
+#include "P2utils.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#include "../utils/utils.h"
 
 void fileread(FILE *file, vector *vec) {
   int x;

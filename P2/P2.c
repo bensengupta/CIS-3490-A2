@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "../utils/utils.h"
-#include "P1utils.h"
+#include "P2utils.h"
 
 long int solutionbruteforce(vector vec);
 long int solutiondivideandconquer(vector vec);
