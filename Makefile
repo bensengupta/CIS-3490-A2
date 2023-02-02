@@ -1,23 +1,23 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -g
 
-Q1_DIR = q1-counting-inversions
+P1_DIR = P1
 
-all: q1
+all: problem1
 
-# q1/utils.o
-$(Q1_DIR)/utils.o: $(Q1_DIR)/utils.c $(Q1_DIR)/utils.h 
-	$(CC) $(CFLAGS) -c $(Q1_DIR)/utils.c -o $(Q1_DIR)/utils.o
+# P1/P1utils.o
+$(P1_DIR)/P1utils.o: $(P1_DIR)/P1utils.c $(P1_DIR)/P1utils.h 
+	$(CC) $(CFLAGS) -c $(P1_DIR)/P1utils.c -o $(P1_DIR)/P1utils.o
 
-# q1 binary
-q1: $(Q1_DIR)/main.c $(Q1_DIR)/utils.o 
-	$(CC) $(CFLAGS) $(Q1_DIR)/main.c $(Q1_DIR)/utils.o -o q1
+# problem1 binary
+problem1: $(P1_DIR)/P1.c $(P1_DIR)/P1utils.o 
+	$(CC) $(CFLAGS) $(P1_DIR)/P1.c $(P1_DIR)/P1utils.o -o problem1
 
-run-test1: q1
-	./q1
+run-test1: problem1
+	echo data_A2_Q1.txt | ./problem1
 
-run-test-vg1: q1
-	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./q1
+run-test-vg1: problem1
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./problem1
 
 clean:
-	rm -f $(Q1_DIR)/*.o q1
+	rm -f $(P1_DIR)/*.o problem1

@@ -1,31 +1,25 @@
 #include <string.h>
 
-#include "utils.h"
+#include "P1utils.h"
 
-#define DEBUG 1
-
-long int solutionBruteForce(vector vec);
-long int solutionDivideAndConquer(vector vec);
+long int solutionbruteforce(vector vec);
+long int solutiondivideandconquer(vector vec);
+long int mergesort(vector vec, int start, int stop);
 
 int main(void) {
   FILE *file;
+
   char buffer[BUFFSIZE];
   vector nums;
-
   vectorinit(&nums);
 
-  if (DEBUG) {
-    strcpy(buffer, "data_A2_Q1.txt");
-  } else {
-    fileprompt(buffer);
-  }
-
+  fileprompt(buffer);
   fileopen(buffer, &file);
   fileread(file, &nums);
+  fclose(file);
 
-  // Brute force solution
   long int start = timems();
-  long int inversions = solutionDivideAndConquer(nums);
+  long int inversions = solutiondivideandconquer(nums);
   long int end = timems();
 
   printf("Elapsed=%ldms Inversions=%ld\n", end - start, inversions);
@@ -37,7 +31,7 @@ int main(void) {
 
 // Solution 1: Brute Force
 // Time Complexity: O(n^2)
-long int solutionBruteForce(vector vec) {
+long int solutionbruteforce(vector vec) {
   long int inversions = 0;
 
   for (int i = 0; i < vec.size; i++) {
@@ -51,7 +45,17 @@ long int solutionBruteForce(vector vec) {
   return inversions;
 }
 
-// stop is non inclusive
+// Solution 2: Divide And Conquer
+// Time Complexity: O(n log n)
+long int solutiondivideandconquer(vector vec) {
+  vector copy;
+  vectorinit(&copy);
+  vectorcopy(&copy, &vec);
+  return mergesort(copy, 0, copy.size);
+}
+
+// Merge sort will sort vec in-place
+// Note: stop is non-inclusive
 long int mergesort(vector vec, int start, int stop) {
   // Base case: length 0 or 1
   if (start >= stop - 1) {
@@ -105,13 +109,4 @@ long int mergesort(vector vec, int start, int stop) {
   vectorfree(&sorted);
 
   return inversions;
-}
-
-// Solution 2: Divide And Conquer
-// Time Complexity: O(n log n)
-long int solutionDivideAndConquer(vector vec) {
-  vector copy;
-  vectorinit(&copy);
-  vectorcopy(&copy, &vec);
-  return mergesort(copy, 0, copy.size);
 }
