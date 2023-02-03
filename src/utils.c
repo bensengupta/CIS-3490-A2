@@ -7,7 +7,10 @@
 #include <time.h>
 
 void readline(char buffer[BUFFSIZE]) {
-  fgets(buffer, BUFFSIZE, stdin);
+  if (fgets(buffer, BUFFSIZE, stdin) == NULL) {
+    fprintf(stderr, "error: failed to read from stdin\n");
+    exit(1);
+  }
   buffer[strlen(buffer) - 1] = '\0';
 }
 
@@ -28,7 +31,7 @@ void fileopen(char filename[BUFFSIZE], FILE **fp) {
 }
 
 unsigned int optionprompt(unsigned int count, option *options) {
-  for (int i = 0; i < count; i++) {
+  for (unsigned int i = 0; i < count; i++) {
     printf("[%s] %s\n", options[i][0], options[i][1]);
   }
 

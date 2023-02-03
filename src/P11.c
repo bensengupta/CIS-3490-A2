@@ -6,8 +6,8 @@
 long int bruteforceinversions(vector vec) {
   long int inversions = 0;
 
-  for (int i = 0; i < vec.size; i++) {
-    for (int j = i + 1; j < vec.size; j++) {
+  for (unsigned int i = 0; i < vec.size; i++) {
+    for (unsigned int j = i + 1; j < vec.size; j++) {
       if (vec.items[i] > vec.items[j]) {
         inversions++;
       }

@@ -38,7 +38,7 @@ void eval(algresult (*algorithm)(vector vec)) {
 
   printf("Elapsed=%ldms NumPoints=%d Length=%f\n", end - start, res.path.size,
          res.length);
-  for (int i = 0; i < res.path.size; i++) {
+  for (unsigned int i = 0; i < res.path.size; i++) {
     point p = res.path.items[i];
     printf("  Point %.1f %.1f\n", p.x, p.y);
   }
@@ -53,7 +53,7 @@ void vectorinit(vector *vec) {
 }
 
 void vectorcopy(vector *dest, vector *src) {
-  for (int i = 0; i < src->size; i++) {
+  for (unsigned int i = 0; i < src->size; i++) {
     vectoradd(dest, src->items[i]);
   }
 }

@@ -49,7 +49,7 @@ long int mergesort(vector vec, int start, int stop) {
   }
 
   // Copy over to original array
-  for (int i = 0; i < sorted.size; i++) {
+  for (unsigned int i = 0; i < sorted.size; i++) {
     vec.items[start + i] = sorted.items[i];
   }
 

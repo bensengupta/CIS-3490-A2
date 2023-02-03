@@ -48,7 +48,7 @@ void vectorinit(vector *vec) {
 }
 
 void vectorcopy(vector *dest, vector *src) {
-  for (int i = 0; i < src->size; i++) {
+  for (unsigned int i = 0; i < src->size; i++) {
     vectoradd(dest, src->items[i]);
   }
 }
