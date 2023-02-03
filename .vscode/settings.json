@@ -51,6 +51,11 @@
     "sstream": "c",
     "stdexcept": "c",
     "streambuf": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "stdio.h": "c",
+    "stdarg.h": "c",
+    "utils.h": "c",
+    "stdbool.h": "c",
+    "p2utils.h": "c"
   }
 }

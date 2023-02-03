@@ -1,42 +1,53 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -g
 
-P1_DIR = P1
-P2_DIR = P2
+SRC = src
+INC = include
+OBJ = objects
+BIN = bin
 
-all: problem1 problem2
+all: $(BIN)/P11 $(BIN)/P12 $(BIN)/P21 $(BIN)/P22 
 
-# utils/utils.o
-utils/utils.o: utils/utils.c utils/utils.h 
-	$(CC) $(CFLAGS) -c utils/utils.c -o utils/utils.o
+# obj/utils.o
+$(OBJ)/utils.o: $(SRC)/utils.c $(INC)/utils.h 
+	$(CC) $(CFLAGS) -c $(SRC)/utils.c -o $(OBJ)/utils.o
+# obj/P1utils.o
+$(OBJ)/P1utils.o: $(SRC)/P1utils.c $(INC)/P1utils.h 
+	$(CC) $(CFLAGS) -c $(SRC)/P1utils.c -o $(OBJ)/P1utils.o
+# obj/P2utils.o
+$(OBJ)/P2utils.o: $(SRC)/P2utils.c $(INC)/P2utils.h 
+	$(CC) $(CFLAGS) -c $(SRC)/P2utils.c -o $(OBJ)/P2utils.o
 
-# P1/P1utils.o
-$(P1_DIR)/P1utils.o: $(P1_DIR)/P1utils.c $(P1_DIR)/P1utils.h 
-	$(CC) $(CFLAGS) -c $(P1_DIR)/P1utils.c -o $(P1_DIR)/P1utils.o
+# bin/P11
+$(BIN)/P11: $(SRC)/P11.c $(OBJ)/P1utils.o $(OBJ)/utils.o
+	$(CC) $(CFLAGS)  $(SRC)/P11.c $(OBJ)/P1utils.o $(OBJ)/utils.o -o $(BIN)/P11
+# bin/P12
+$(BIN)/P12: $(SRC)/P12.c $(OBJ)/P1utils.o $(OBJ)/utils.o
+	$(CC) $(CFLAGS)  $(SRC)/P12.c $(OBJ)/P1utils.o $(OBJ)/utils.o -o $(BIN)/P12
+# bin/P21
+$(BIN)/P21: $(SRC)/P21.c $(OBJ)/P2utils.o $(OBJ)/utils.o
+	$(CC) $(CFLAGS)  $(SRC)/P21.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P21
+# bin/P22
+$(BIN)/P22: $(SRC)/P22.c $(OBJ)/P2utils.o $(OBJ)/utils.o
+	$(CC) $(CFLAGS)  $(SRC)/P22.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P22
 
-# P2/P2utils.o
-$(P2_DIR)/P2utils.o: $(P2_DIR)/P2utils.c $(P2_DIR)/P2utils.h 
-	$(CC) $(CFLAGS) -c $(P2_DIR)/P2utils.c -o $(P2_DIR)/P2utils.o
+run11: $(BIN)/P11
+	./$(BIN)/P11
+run12: $(BIN)/P12
+	./$(BIN)/P12
+run21: $(BIN)/P21
+	./$(BIN)/P21
+run22: $(BIN)/P22
+	./$(BIN)/P22
 
-# problem1 binary
-problem1: $(P1_DIR)/P1.c $(P1_DIR)/P1utils.o utils/utils.o
-	$(CC) $(CFLAGS) $(P1_DIR)/P1.c $(P1_DIR)/P1utils.o utils/utils.o -o problem1
-
-# problem2 binary
-problem2: $(P2_DIR)/P2.c $(P2_DIR)/P2utils.o utils/utils.o
-	$(CC) $(CFLAGS) $(P2_DIR)/P2.c $(P2_DIR)/P2utils.o utils/utils.o -o problem2
-
-run-test1: problem1
-	./problem1
-
-run-test2: problem2
-	./problem2
-
-run-test-vg1: problem1
-	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./problem1
-
-run-test-vg2: problem2
-	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./problem2
+run11vg: $(BIN)/P11
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(BIN)/P11
+run12vg: $(BIN)/P12
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(BIN)/P12
+run21vg: $(BIN)/P21
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(BIN)/P21
+run22vg: $(BIN)/P22
+	valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(BIN)/P22
 
 clean:
-	rm -f $(P1_DIR)/*.o $(P2_DIR)/*.o utils/*.o problem1 problem2
+	rm -f $(OBJ)/*.o $(BIN)/*

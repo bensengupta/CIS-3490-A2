@@ -1,4 +1,4 @@
-#include "P2utils.h"
+#include "../include/P2utils.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -7,11 +7,43 @@
 #include <string.h>
 #include <time.h>
 
+#include "../include/utils.h"
+
 void fileread(FILE *file, vector *vec) {
   point p;
   while (fscanf(file, "%f %f", &p.x, &p.y) == 2) {
     vectoradd(vec, p);
   }
+}
+
+void eval(algresult (*algorithm)(vector vec)) {
+  FILE *file;
+  vector vec;
+  algresult res;
+  long int start, end;
+
+  vectorinit(&vec);
+
+  char filename[] = "data_A2_Q2.txt";
+
+  fileopen(filename, &file);
+  fileread(file, &vec);
+  fclose(file);
+
+  printf("%d points loaded from '%s'\n", vec.size, filename);
+
+  start = millis();
+  res = algorithm(vec);
+  end = millis();
+
+  printf("Elapsed=%ldms NumPoints=%d Length=%f\n", end - start, res.path.size,
+         res.length);
+  for (int i = 0; i < res.path.size; i++) {
+    point p = res.path.items[i];
+    printf("  Point %.1f %.1f\n", p.x, p.y);
+  }
+
+  vectorfree(&vec);
 }
 
 void vectorinit(vector *vec) {

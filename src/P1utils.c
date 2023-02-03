@@ -1,4 +1,4 @@
-#include "P1utils.h"
+#include "../include/P1utils.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -7,13 +7,38 @@
 #include <string.h>
 #include <time.h>
 
-#include "../utils/utils.h"
+#include "../include/utils.h"
 
 void fileread(FILE *file, vector *vec) {
   int x;
   while (fscanf(file, "%d", &x) == 1) {
     vectoradd(vec, x);
   }
+}
+
+void eval(long int (*algorithm)(vector vec)) {
+  FILE *file;
+  char buffer[BUFFSIZE];
+  vector vec;
+  long int inversions;
+  long int start, end;
+
+  vectorinit(&vec);
+
+  fileprompt(buffer);
+  fileopen(buffer, &file);
+  fileread(file, &vec);
+  fclose(file);
+
+  printf("%d numbers loaded from '%s'\n", vec.size, buffer);
+
+  start = millis();
+  inversions = algorithm(vec);
+  end = millis();
+
+  printf("Elapsed=%ldms Inversions=%ld\n", end - start, inversions);
+
+  vectorfree(&vec);
 }
 
 void vectorinit(vector *vec) {

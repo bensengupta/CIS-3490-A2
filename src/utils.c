@@ -1,6 +1,5 @@
-#include "utils.h"
+#include "../include/utils.h"
 
-#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,4 +48,4 @@ unsigned int optionprompt(unsigned int count, option *options) {
   }
 }
 
-long int timems() { return (1000 * clock()) / CLOCKS_PER_SEC; }
+long int millis() { return (1000 * clock()) / CLOCKS_PER_SEC; }
