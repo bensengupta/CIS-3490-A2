@@ -1,5 +1,5 @@
-problem1
-problem2
+bin/*
+objects/*
 
 # Prerequisites
 *.d
