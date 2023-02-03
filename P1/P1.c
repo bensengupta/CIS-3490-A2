@@ -55,7 +55,7 @@ long int solutionbruteforce(vector vec) {
 
   for (int i = 0; i < vec.size; i++) {
     for (int j = i + 1; j < vec.size; j++) {
-      if (vec.nums[i] > vec.nums[j]) {
+      if (vec.items[i] > vec.items[j]) {
         inversions++;
       }
     }
@@ -101,28 +101,28 @@ long int mergesort(vector vec, int start, int stop) {
   int i = lstart;
   int j = rstart;
   while (i < lstop && j < rstop) {
-    if (vec.nums[i] <= vec.nums[j]) {
-      vectoradd(&sorted, vec.nums[i]);
+    if (vec.items[i] <= vec.items[j]) {
+      vectoradd(&sorted, vec.items[i]);
       i++;
     } else {
-      vectoradd(&sorted, vec.nums[j]);
+      vectoradd(&sorted, vec.items[j]);
       inversions += (lstop - i);
       j++;
     }
   }
 
   while (i < lstop) {
-    vectoradd(&sorted, vec.nums[i]);
+    vectoradd(&sorted, vec.items[i]);
     i++;
   }
   while (j < rstop) {
-    vectoradd(&sorted, vec.nums[j]);
+    vectoradd(&sorted, vec.items[j]);
     j++;
   }
 
   // Copy over to original array
   for (int i = 0; i < sorted.size; i++) {
-    vec.nums[start + i] = sorted.nums[i];
+    vec.items[start + i] = sorted.items[i];
   }
 
   vectorfree(&sorted);

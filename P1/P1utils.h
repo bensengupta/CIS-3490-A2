@@ -3,7 +3,7 @@
 typedef struct vector {
   unsigned int size;
   unsigned int capacity;
-  unsigned long int *nums;
+  unsigned long int *items;
 } vector;
 
 void fileread(FILE *file, vector *vec);
