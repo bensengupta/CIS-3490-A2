@@ -4,12 +4,6 @@
 #include "../include/P2utils.h"
 #include "../include/utils.h"
 
-bool doubleeq(double x1, double x2) {
-  double sub = x1 - x2;
-  double abs = (sub >= 0) ? sub : -sub;
-  return abs < 0.000001;
-}
-
 // Solution 1: Brute Force
 // Time Complexity: O(n^2)
 algresult convexhullbruteforce(vector vec) {
@@ -28,7 +22,7 @@ algresult convexhullbruteforce(vector vec) {
       // Calculate line equation
       double a = p2.y - p1.y;
       double b = p1.x - p2.x;
-      double c = (double)p1.x * (double)p2.y - (double)p1.y * (double)p2.x;
+      double c = p1.x * p2.y - p1.y * p2.x;
 
       bool isHullSegment = true;
 
@@ -40,21 +34,16 @@ algresult convexhullbruteforce(vector vec) {
 
       // Check that all points lie on one side of the hull
       for (unsigned int k = 0; k < vec.size; k++) {
-        // if (k == i || k == j) continue;
         point pk = vec.items[k];
         double lhs = a * pk.x + b * pk.y;
 
-        if (i == 17488 && j == 0 && k == 0) {
-          printf("lhs=%lf, c=%lf\n", lhs, c);
-        }
-
-        // floateq(lhs, c) means a * x + b * y == c and pk is on the line
+        // doubleeq(lhs, c) means a * x + b * y == c and pk is on the line
         if (doubleeq(lhs, c)) {
           // Skip if point K is overlapping with point I or J
           if (pointeq(pk, p1)) continue;
           if (pointeq(pk, p2)) continue;
           // Skip if point I is not in between point J and K
-          if (!inboundsf(p2, pk, p1)) continue;
+          if (!inbounds(p2, pk, p1)) continue;
           isHullSegment = false;
           break;
           // lhs > c means p is greater than the line

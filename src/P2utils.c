@@ -10,21 +10,22 @@
 
 #include "../include/utils.h"
 
-float absf(float n) { return (n >= 0) ? n : -n; }
-bool floateq(float x1, float x2) { return absf(x1 - x2) < 0.000001; }
+bool doubleeq(double x1, double x2) { return fabs(x1 - x2) < 0.000001; }
 bool pointeq(point p1, point p2) {
-  return floateq(p1.x, p2.x) && floateq(p1.y, p2.y);
+  return doubleeq(p1.x, p2.x) && doubleeq(p1.y, p2.y);
 }
 
-bool inboundsf(point boxp1, point boxp2, point p) {
-  float minx = (boxp1.x < boxp2.x) ? boxp1.x : boxp2.x;
-  float maxx = (boxp1.x > boxp2.x) ? boxp1.x : boxp2.x;
-  float miny = (boxp1.y < boxp2.y) ? boxp1.y : boxp2.y;
-  float maxy = (boxp1.y > boxp2.y) ? boxp1.y : boxp2.y;
+bool inbounds(point boxp1, point boxp2, point p) {
+  double minx = (boxp1.x < boxp2.x) ? boxp1.x : boxp2.x;
+  double maxx = (boxp1.x > boxp2.x) ? boxp1.x : boxp2.x;
+  double miny = (boxp1.y < boxp2.y) ? boxp1.y : boxp2.y;
+  double maxy = (boxp1.y > boxp2.y) ? boxp1.y : boxp2.y;
 
-  if (!floateq(minx, p.x) && !floateq(maxx, p.x) && (p.x < minx || p.x > maxx))
+  if (!doubleeq(minx, p.x) && !doubleeq(maxx, p.x) &&
+      (p.x < minx || p.x > maxx))
     return false;
-  if (!floateq(miny, p.y) && !floateq(maxy, p.y) && (p.y < miny || p.y > maxy))
+  if (!doubleeq(miny, p.y) && !doubleeq(maxy, p.y) &&
+      (p.y < miny || p.y > maxy))
     return false;
 
   return true;
@@ -32,7 +33,7 @@ bool inboundsf(point boxp1, point boxp2, point p) {
 
 typedef struct pointwithangle {
   point point;
-  float angle;
+  double angle;
 } pointwithangle;
 
 int cmp_pointwithcenter(const void *a, const void *b) {
@@ -80,7 +81,7 @@ void hullsortclockwise(vector vec) {
 
 void fileread(FILE *file, vector *vec) {
   point p;
-  while (fscanf(file, "%f %f", &p.x, &p.y) == 2) {
+  while (fscanf(file, "%lf %lf", &p.x, &p.y) == 2) {
     vectoradd(vec, p);
   }
 }
