@@ -56,6 +56,7 @@
     "stdarg.h": "c",
     "utils.h": "c",
     "stdbool.h": "c",
-    "p2utils.h": "c"
+    "p2utils.h": "c",
+    "stdlib.h": "c"
   }
 }

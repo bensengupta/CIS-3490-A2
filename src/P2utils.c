@@ -1,5 +1,6 @@
 #include "../include/P2utils.h"
 
+#include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,6 +9,74 @@
 #include <time.h>
 
 #include "../include/utils.h"
+
+float absf(float n) { return (n >= 0) ? n : -n; }
+bool floateq(float x1, float x2) { return absf(x1 - x2) < 0.000001; }
+bool pointeq(point p1, point p2) {
+  return floateq(p1.x, p2.x) && floateq(p1.y, p2.y);
+}
+
+bool inboundsf(point boxp1, point boxp2, point p) {
+  float minx = (boxp1.x < boxp2.x) ? boxp1.x : boxp2.x;
+  float maxx = (boxp1.x > boxp2.x) ? boxp1.x : boxp2.x;
+  float miny = (boxp1.y < boxp2.y) ? boxp1.y : boxp2.y;
+  float maxy = (boxp1.y > boxp2.y) ? boxp1.y : boxp2.y;
+
+  if (!floateq(minx, p.x) && !floateq(maxx, p.x) && (p.x < minx || p.x > maxx))
+    return false;
+  if (!floateq(miny, p.y) && !floateq(maxy, p.y) && (p.y < miny || p.y > maxy))
+    return false;
+
+  return true;
+}
+
+typedef struct pointwithangle {
+  point point;
+  float angle;
+} pointwithangle;
+
+int cmp_pointwithcenter(const void *a, const void *b) {
+  const pointwithangle *p1 = a, *p2 = b;
+  return (p1->angle > p2->angle) - (p1->angle < p2->angle);
+}
+
+void hullsortclockwise(vector vec) {
+  if (vec.size == 0) return;
+
+  // Find point with lowest Y
+  point lowest = vec.items[0];
+
+  for (unsigned int i = 0; i < vec.size; i++) {
+    if (vec.items[i].y < lowest.y) {
+      lowest = vec.items[i];
+    }
+  }
+
+  pointwithangle *pts = malloc(vec.size * sizeof(pointwithangle));
+
+  if (pts == NULL) {
+    fprintf(stderr, "error: out of memory\n");
+    exit(1);
+  }
+
+  for (unsigned int i = 0; i < vec.size; i++) {
+    point p = vec.items[i];
+    pts[i].point = p;
+    // Compute angle relative to lowest Y point
+    pts[i].angle =
+        p.x == lowest.x ? 0.0 : atan2f(p.y - lowest.y, p.x - lowest.x);
+  }
+
+  // Sort with respect to angle
+  qsort(pts, vec.size, sizeof(pointwithangle), cmp_pointwithcenter);
+
+  // Finally, write over original vector
+  for (unsigned int i = 0; i < vec.size; i++) {
+    vec.items[i] = pts[i].point;
+  }
+
+  free(pts);
+}
 
 void fileread(FILE *file, vector *vec) {
   point p;
@@ -18,13 +87,13 @@ void fileread(FILE *file, vector *vec) {
 
 void eval(algresult (*algorithm)(vector vec)) {
   FILE *file;
-  vector vec;
   algresult res;
   long int start, end;
 
+  vector vec;
   vectorinit(&vec);
 
-  char filename[] = "data_A2_Q2.txt";
+  char filename[BUFFSIZE] = "data_A2_Q2.txt";
 
   fileopen(filename, &file);
   fileread(file, &vec);
@@ -40,10 +109,11 @@ void eval(algresult (*algorithm)(vector vec)) {
          res.length);
   for (unsigned int i = 0; i < res.path.size; i++) {
     point p = res.path.items[i];
-    printf("  Point %.1f %.1f\n", p.x, p.y);
+    printf("  %.1f   %.1f\n", p.x, p.y);
   }
 
   vectorfree(&vec);
+  vectorfree(&res.path);
 }
 
 void vectorinit(vector *vec) {

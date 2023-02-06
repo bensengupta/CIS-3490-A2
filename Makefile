@@ -26,10 +26,10 @@ $(BIN)/P12: $(SRC)/P12.c $(OBJ)/P1utils.o $(OBJ)/utils.o
 	$(CC) $(CFLAGS)  $(SRC)/P12.c $(OBJ)/P1utils.o $(OBJ)/utils.o -o $(BIN)/P12
 # bin/P21
 $(BIN)/P21: $(SRC)/P21.c $(OBJ)/P2utils.o $(OBJ)/utils.o
-	$(CC) $(CFLAGS)  $(SRC)/P21.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P21
+	$(CC) $(CFLAGS)  $(SRC)/P21.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P21 -lm
 # bin/P22
 $(BIN)/P22: $(SRC)/P22.c $(OBJ)/P2utils.o $(OBJ)/utils.o
-	$(CC) $(CFLAGS)  $(SRC)/P22.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P22
+	$(CC) $(CFLAGS)  $(SRC)/P22.c $(OBJ)/P2utils.o $(OBJ)/utils.o -o $(BIN)/P22 -lm
 
 run11: $(BIN)/P11
 	./$(BIN)/P11

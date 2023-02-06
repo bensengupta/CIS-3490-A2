@@ -19,10 +19,10 @@ void fileread(FILE *file, vector *vec) {
 void eval(long int (*algorithm)(vector vec)) {
   FILE *file;
   char buffer[BUFFSIZE];
-  vector vec;
   long int inversions;
   long int start, end;
 
+  vector vec;
   vectorinit(&vec);
 
   fileprompt(buffer);
