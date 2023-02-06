@@ -10,25 +10,9 @@
 
 #include "../include/utils.h"
 
-bool doubleeq(double x1, double x2) { return fabs(x1 - x2) < 0.000001; }
+bool doubleeq(double x1, double x2) { return fabs(x1 - x2) < DOUBLE_ERROR; }
 bool pointeq(point p1, point p2) {
   return doubleeq(p1.x, p2.x) && doubleeq(p1.y, p2.y);
-}
-
-bool inbounds(point boxp1, point boxp2, point p) {
-  double minx = (boxp1.x < boxp2.x) ? boxp1.x : boxp2.x;
-  double maxx = (boxp1.x > boxp2.x) ? boxp1.x : boxp2.x;
-  double miny = (boxp1.y < boxp2.y) ? boxp1.y : boxp2.y;
-  double maxy = (boxp1.y > boxp2.y) ? boxp1.y : boxp2.y;
-
-  if (!doubleeq(minx, p.x) && !doubleeq(maxx, p.x) &&
-      (p.x < minx || p.x > maxx))
-    return false;
-  if (!doubleeq(miny, p.y) && !doubleeq(maxy, p.y) &&
-      (p.y < miny || p.y > maxy))
-    return false;
-
-  return true;
 }
 
 typedef struct pointwithangle {
@@ -36,7 +20,7 @@ typedef struct pointwithangle {
   double angle;
 } pointwithangle;
 
-int cmp_pointwithcenter(const void *a, const void *b) {
+int cmp_pointwithangle(const void *a, const void *b) {
   const pointwithangle *p1 = a, *p2 = b;
   return (p1->angle > p2->angle) - (p1->angle < p2->angle);
 }
@@ -69,7 +53,7 @@ void hullsortclockwise(vector vec) {
   }
 
   // Sort with respect to angle
-  qsort(pts, vec.size, sizeof(pointwithangle), cmp_pointwithcenter);
+  qsort(pts, vec.size, sizeof(pointwithangle), cmp_pointwithangle);
 
   // Finally, write over original vector
   for (unsigned int i = 0; i < vec.size; i++) {

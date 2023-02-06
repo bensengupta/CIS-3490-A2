@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -12,8 +13,6 @@ algresult convexhullbruteforce(vector vec) {
 
   for (unsigned int i = 0; i < vec.size; i++) {
     for (unsigned int j = 0; j < vec.size; j++) {
-      if (i == j) continue;
-
       // The purpose of the below code is to determine if p1 is part of the
       // convex hull
       point p1 = vec.items[i];
@@ -43,7 +42,9 @@ algresult convexhullbruteforce(vector vec) {
           if (pointeq(pk, p1)) continue;
           if (pointeq(pk, p2)) continue;
           // Skip if point I is not in between point J and K
-          if (!inbounds(p2, pk, p1)) continue;
+          if (p1.x < fmin(p2.x, pk.x) || fmax(p2.x, pk.x) < p1.x ||
+              p1.y < fmin(p2.y, pk.y) || fmax(p2.y, pk.y) < p1.y)
+            continue;
           isHullSegment = false;
           break;
           // lhs > c means p is greater than the line

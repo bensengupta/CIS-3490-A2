@@ -4,6 +4,8 @@
 #ifndef P2UTILS_H
 #define P2UTILS_H
 
+#define DOUBLE_ERROR 0.0000001
+
 typedef struct point {
   double x;
   double y;
@@ -28,7 +30,6 @@ typedef struct algresult {
 
 bool doubleeq(double x1, double x2);
 bool pointeq(point p1, point p2);
-bool inbounds(point boxp1, point boxp2, point p);
 void hullsortclockwise(vector vec);
 
 void eval(algresult (*algorithm)(vector vec));
