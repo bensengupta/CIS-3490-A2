@@ -36,7 +36,7 @@ void eval(long int (*algorithm)(vector vec)) {
   inversions = algorithm(vec);
   end = millis();
 
-  printf("Elapsed=%ldms Inversions=%ld\n", end - start, inversions);
+  printf("Time=%ldms Inversions=%ld\n", end - start, inversions);
 
   vectorfree(&vec);
 }

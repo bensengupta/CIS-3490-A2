@@ -3,14 +3,13 @@
 
 // Solution 2: Divide and conquer
 // Time Complexity: O(n log n)
-algresult convexhulldivideandconquer(vector vec) {
+vector convexhulldivideandconquer(vector vec) {
   vector path;
   vectorinit(&path);
-  algresult res = {0.0, path};
 
   // Algorithm here
 
-  return res;
+  return path;
 }
 
 int main(void) {

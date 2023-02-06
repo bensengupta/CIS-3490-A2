@@ -7,18 +7,17 @@
 
 // Solution 1: Brute Force
 // Time Complexity: O(n^2)
-algresult convexhullbruteforce(vector vec) {
+vector convexhullbruteforce(vector vec) {
   vector path;
   vectorinit(&path);
 
   for (unsigned int i = 0; i < vec.size; i++) {
-    for (unsigned int j = 0; j < vec.size; j++) {
-      // The purpose of the below code is to determine if p1 is part of the
-      // convex hull
+    for (unsigned int j = i + 1; j < vec.size; j++) {
+      // Are points p1 and p2 on the convex hull?
       point p1 = vec.items[i];
       point p2 = vec.items[j];
 
-      // Calculate line equation
+      // Calculate line equation between p1 and p2
       double a = p2.y - p1.y;
       double b = p1.x - p2.x;
       double c = p1.x * p2.y - p1.y * p2.x;
@@ -31,29 +30,31 @@ algresult convexhullbruteforce(vector vec) {
       // 0 = Undecided
       int side = 0;
 
-      // Check that all points lie on one side of the hull
+      // Ensure that all points lie on one side of the hull before adding
+      // p1 and p2 to the list of hull points
       for (unsigned int k = 0; k < vec.size; k++) {
         point pk = vec.items[k];
         double lhs = a * pk.x + b * pk.y;
 
         // doubleeq(lhs, c) means a * x + b * y == c and pk is on the line
+        // Case 1: Point K is on the affine line of p1 to p2
         if (doubleeq(lhs, c)) {
-          // Skip if point K is overlapping with point I or J
-          if (pointeq(pk, p1)) continue;
-          if (pointeq(pk, p2)) continue;
-          // Skip if point I is not in between point J and K
-          if (p1.x < fmin(p2.x, pk.x) || fmax(p2.x, pk.x) < p1.x ||
-              p1.y < fmin(p2.y, pk.y) || fmax(p2.y, pk.y) < p1.y)
+          // P1 and P2 are valid hull points only if pk is between them
+          if (fmin(p1.x, p2.x) <= pk.x && pk.x <= fmax(p1.x, p2.x) &&
+              fmin(p1.y, p2.y) <= pk.y && pk.y <= fmax(p1.y, p2.y))
             continue;
           isHullSegment = false;
           break;
-          // lhs > c means p is greater than the line
-        } else if (lhs > c) {
+        }
+        // Case 2: Point K is Greater than the line
+        if (lhs > c) {
+          // If any previous point was lesser than the line, break
           if (side == -1) {
             isHullSegment = false;
             break;
           }
           side = 1;
+          continue;
           // lhs < c means p is less than the line
         } else {
           if (side == 1) {
@@ -65,42 +66,17 @@ algresult convexhullbruteforce(vector vec) {
       }
 
       if (isHullSegment) {
-        vectoradd(&path, vec.items[i]);
+        vectoradd(&path, p1);
+        vectoradd(&path, p2);
         break;
       }
     }
   }
 
-  // Remove duplicate points in the path
-  vector unique;
-  vectorinit(&unique);
+  vectorremoveduplicates(&path);
+  hullsortclockwise(path);
 
-  for (unsigned int i = 0; i < path.size; i++) {
-    bool isUnique = true;
-
-    point p1 = path.items[i];
-
-    for (unsigned int j = i + 1; j < path.size; j++) {
-      point p2 = path.items[j];
-
-      if (pointeq(p1, p2)) {
-        isUnique = false;
-        break;
-      };
-    }
-
-    if (isUnique) {
-      vectoradd(&unique, path.items[i]);
-    }
-  }
-
-  vectorfree(&path);
-
-  hullsortclockwise(unique);
-
-  algresult res = {0.0, unique};
-
-  return res;
+  return path;
 }
 
 int main(void) {

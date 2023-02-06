@@ -31,3 +31,19 @@ void fileopen(char filename[BUFFSIZE], FILE **fp) {
 }
 
 long int millis() { return (1000 * clock()) / CLOCKS_PER_SEC; }
+
+int promptint(int min, int max) {
+  char buffer[BUFFSIZE];
+
+  int inp = -1;
+
+  printf("> ");
+  while (true) {
+    readline(buffer);
+    if (sscanf(buffer, "%d", &inp) == 1 && inp >= min && inp <= max) break;
+    printf("error: invalid input\n");
+    printf("> ");
+  }
+
+  return inp;
+}

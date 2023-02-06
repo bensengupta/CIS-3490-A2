@@ -21,17 +21,15 @@ void fileread(FILE *file, vector *vec);
 void vectorinit(vector *vec);
 void vectorcopy(vector *dest, vector *src);
 void vectoradd(vector *vec, point p);
+void vectorremoveduplicates(vector *vec);
 void vectorfree(vector *vec);
-
-typedef struct algresult {
-  double length;
-  vector path;
-} algresult;
+void vectorprint(vector vec);
 
 bool doubleeq(double x1, double x2);
 bool pointeq(point p1, point p2);
+double pointdistance(point a, point b);
 void hullsortclockwise(vector vec);
 
-void eval(algresult (*algorithm)(vector vec));
+void eval(vector (*algorithm)(vector vec));
 
 #endif /* P2UTILS_H */
