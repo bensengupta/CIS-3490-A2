@@ -83,6 +83,8 @@ shortestpathresult shortestpath(vector points, int start, int end) {
   vector rightpath;
   vectorinit(&rightpath);
 
+  bool isPathLeft = true;
+
   point lastLeft = points.items[start];
   point lastRight = points.items[start];
 
@@ -101,12 +103,16 @@ shortestpathresult shortestpath(vector points, int start, int end) {
     vectoradd(&leftpath, left);
     vectoradd(&rightpath, right);
 
-    if (leftIdx == end || rightIdx == end) break;
+    if (leftIdx == end || rightIdx == end) {
+      if (rightIdx == end && (leftIdx != end || rightlength < leftlength))
+        isPathLeft = false;
+      break;
+    }
   }
 
   shortestpathresult res;
 
-  if (leftlength < rightlength) {
+  if (isPathLeft) {
     res.path = leftpath;
     res.pathlength = leftlength;
     vectorfree(&rightpath);
