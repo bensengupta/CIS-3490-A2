@@ -133,7 +133,7 @@ void eval(vector (*algorithm)(vector vec)) {
   vector vec;
   vectorinit(&vec);
 
-  char filename[BUFFSIZE] = "data_A2_Q2.txt";
+  char filename[BUFFSIZE] = "testdata_A2_Q2.txt";
 
   fileopen(filename, &file);
   fileread(file, &vec);

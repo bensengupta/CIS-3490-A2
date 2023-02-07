@@ -1,17 +1,17 @@
 import random
 
-numhullpoints = 8
+numhullpoints = 7
 points = [
     # hull points
     3.2, 5,
     2, 8.2,
     2.5, 10.5,
     4, 12,
-    11.3, 11.1,
     18.8, 10.2,
     12, 5,
     18.8, 8,
     # rest
+    11.3, 11.1,
     4, 12,
     7, 5,
     5.1, 10,

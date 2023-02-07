@@ -36,7 +36,6 @@ vector convexhullbruteforce(vector vec) {
         point pk = vec.items[k];
         double lhs = a * pk.x + b * pk.y;
 
-        // doubleeq(lhs, c) means a * x + b * y == c and pk is on the line
         // Case 1: Point K is on the affine line of p1 to p2
         if (doubleeq(lhs, c)) {
           // P1 and P2 are valid hull points only if pk is between them
@@ -46,16 +45,14 @@ vector convexhullbruteforce(vector vec) {
           isHullSegment = false;
           break;
         }
-        // Case 2: Point K is Greater than the line
+        // Case 2: Point K is greater than the line
         if (lhs > c) {
-          // If any previous point was lesser than the line, break
           if (side == -1) {
             isHullSegment = false;
             break;
           }
           side = 1;
-          continue;
-          // lhs < c means p is less than the line
+          // Case 3: Point K is lesser than the line
         } else {
           if (side == 1) {
             isHullSegment = false;
