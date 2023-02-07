@@ -12,7 +12,7 @@ vector convexhullbruteforce(vector vec) {
   vectorinit(&path);
 
   for (unsigned int i = 0; i < vec.size; i++) {
-    for (unsigned int j = i + 1; j < vec.size; j++) {
+    for (unsigned int j = 0; j < vec.size; j++) {
       // Are points p1 and p2 on the convex hull?
       point p1 = vec.items[i];
       point p2 = vec.items[j];
@@ -36,8 +36,22 @@ vector convexhullbruteforce(vector vec) {
         point pk = vec.items[k];
         double lhs = a * pk.x + b * pk.y;
 
-        // Case 1: Point K is on the affine line of p1 to p2
-        if (doubleeq(lhs, c)) {
+        // Case 1: Point K is greater than the line
+        if (lhs > c + DOUBLE_ERROR) {
+          if (side == -1) {
+            isHullSegment = false;
+            break;
+          }
+          side = 1;
+          // Case 2: Point K is lesser than the line
+        } else if (lhs < c - DOUBLE_ERROR) {
+          if (side == 1) {
+            isHullSegment = false;
+            break;
+          }
+          side = -1;
+        } else {
+          // Case 3: Point K is on the affine line of p1 to p2
           // P1 and P2 are valid hull points only if pk is between them
           if (fmin(p1.x, p2.x) <= pk.x && pk.x <= fmax(p1.x, p2.x) &&
               fmin(p1.y, p2.y) <= pk.y && pk.y <= fmax(p1.y, p2.y))
@@ -45,26 +59,10 @@ vector convexhullbruteforce(vector vec) {
           isHullSegment = false;
           break;
         }
-        // Case 2: Point K is greater than the line
-        if (lhs > c) {
-          if (side == -1) {
-            isHullSegment = false;
-            break;
-          }
-          side = 1;
-          // Case 3: Point K is lesser than the line
-        } else {
-          if (side == 1) {
-            isHullSegment = false;
-            break;
-          }
-          side = -1;
-        }
       }
 
       if (isHullSegment) {
         vectoradd(&path, p1);
-        vectoradd(&path, p2);
         break;
       }
     }

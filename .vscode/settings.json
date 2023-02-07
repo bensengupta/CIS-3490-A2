@@ -57,6 +57,8 @@
     "utils.h": "c",
     "stdbool.h": "c",
     "p2utils.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "time.h": "c",
+    "unistd.h": "c"
   }
 }

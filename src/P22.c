@@ -2,8 +2,8 @@
 #include "../include/utils.h"
 
 // Partitions points of vec from index left to right (exclusive) into S1: points
-// that lie to the left of the line and S2: points that lie on the right of the
-// line
+// that lie on or to the left of the line, and S2: points that lie on the right
+// of the line
 //
 // Returns the start index of S2
 unsigned int partition(vector *vec, unsigned int left, unsigned int right,
@@ -19,7 +19,7 @@ unsigned int partition(vector *vec, unsigned int left, unsigned int right,
   for (unsigned int i = left; i < right; i++) {
     point p3 = vec->items[i];
 
-    if (a * p3.x + b * p3.y < c) {
+    if (a * p3.x + b * p3.y < c + DOUBLE_ERROR) {
       // Swap points[i] and points[fill]
       vec->items[i] = vec->items[fill];
       vec->items[fill] = p3;
@@ -79,6 +79,15 @@ vector convexhulldivideandconquer(vector vec) {
     if (vec.items[i].x > vec.items[maxIdx].x) maxIdx = i;
   }
 
+  // If all points are exactly on a vertical line
+  // Then find farthest Y points
+  if (minIdx == maxIdx) {
+    for (unsigned int i = 0; i < vec.size; i++) {
+      if (vec.items[i].y < vec.items[minIdx].y) minIdx = i;
+      if (vec.items[i].y > vec.items[maxIdx].y) maxIdx = i;
+    }
+  }
+
   point A = vec.items[minIdx];
   point B = vec.items[maxIdx];
 
@@ -94,9 +103,21 @@ vector convexhulldivideandconquer(vector vec) {
   vec.items[maxIdx] = vec.items[right - 2];
   right -= 2;
 
-  unsigned int p = partition(&vec, left, right, A, B);
-  findhull(&hull, &vec, left, p, B, A);
-  findhull(&hull, &vec, p, right, A, B);
+  // Partitions vec into left of or on the line and right of the line
+  unsigned int pivot = partition(&vec, left, right, A, B);
+
+  // But, we do not want to consider any points that are on the line
+  // so shrink left partition until all points are strictly left of the line
+  double a = B.y - A.y, b = A.x - B.x, c = A.x * B.y - A.y * B.x;
+
+  unsigned j = pivot;
+  while (j > left &&
+         doubleeq(a * vec.items[j - 1].x + b * vec.items[j - 1].y, c)) {
+    j--;
+  }
+
+  findhull(&hull, &vec, left, j, B, A);
+  findhull(&hull, &vec, pivot, right, A, B);
 
   hullsortclockwise(hull);
 
