@@ -4,7 +4,7 @@
 #ifndef P2UTILS_H
 #define P2UTILS_H
 
-#define DOUBLE_ERROR 0.0000001
+#define DOUBLE_ERROR 0.000001
 
 typedef struct point {
   double x;
@@ -29,6 +29,7 @@ bool doubleeq(double x1, double x2);
 bool pointeq(point p1, point p2);
 double pointdistance(point a, point b);
 void hullsortclockwise(vector vec);
+unsigned int promptpointindex(vector points);
 
 void eval(vector (*algorithm)(vector vec));
 

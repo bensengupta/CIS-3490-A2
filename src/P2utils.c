@@ -154,10 +154,11 @@ void eval(vector (*algorithm)(vector vec)) {
   printf("\n");
 
   printf("==== compute shortest path ====\n");
-  printf("enter index of starting point:\n");
-  int idxstart = promptint(0, hull.size - 1);
-  printf("enter index of ending point:\n");
-  int idxend = promptint(0, hull.size - 1);
+  printf("enter coordinates of starting point:\n");
+  printf("e.g. 1156.3 24.3\n");
+  int idxstart = promptpointindex(hull);
+  printf("enter coordinates of ending point:\n");
+  int idxend = promptpointindex(hull);
   printf("\n");
 
   shortestpathresult res = shortestpath(hull, idxstart, idxend);
@@ -168,6 +169,44 @@ void eval(vector (*algorithm)(vector vec)) {
   vectorfree(&vec);
   vectorfree(&hull);
   vectorfree(&res.path);
+}
+
+unsigned int promptpointindex(vector points) {
+  char buffer[BUFFSIZE];
+
+  unsigned int index = 0;
+  double x = -1;
+  double y = -1;
+
+  while (true) {
+    printf("> ");
+    readline(buffer);
+
+    if (sscanf(buffer, "%lf %lf", &x, &y) != 2) {
+      printf("error: invalid input\n");
+      continue;
+    }
+
+    bool foundPoint = false;
+    point p = {x, y};
+
+    for (unsigned int i = 0; i < points.size; i++) {
+      if (pointeq(p, points.items[i])) {
+        index = i;
+        foundPoint = true;
+        break;
+      }
+    }
+
+    if (!foundPoint) {
+      printf("error: failed to find point\n");
+      continue;
+    }
+
+    break;
+  }
+
+  return index;
 }
 
 void fileread(FILE *file, vector *vec) {
