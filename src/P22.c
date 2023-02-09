@@ -104,20 +104,11 @@ vector convexhulldivideandconquer(vector vec) {
   right -= 2;
 
   // Partitions vec into left of or on the line and right of the line
-  unsigned int pivot = partition(&vec, left, right, A, B);
+  unsigned int pivotright = partition(&vec, left, right, A, B);
+  unsigned int pivotleft = partition(&vec, left, pivotright, B, A);
 
-  // But, we do not want to consider any points that are on the line
-  // so shrink left partition until all points are strictly left of the line
-  double a = B.y - A.y, b = A.x - B.x, c = A.x * B.y - A.y * B.x;
-
-  unsigned j = pivot;
-  while (j > left &&
-         doubleeq(a * vec.items[j - 1].x + b * vec.items[j - 1].y, c)) {
-    j--;
-  }
-
-  findhull(&hull, &vec, left, j, B, A);
-  findhull(&hull, &vec, pivot, right, A, B);
+  findhull(&hull, &vec, pivotleft, pivotright, B, A);
+  findhull(&hull, &vec, pivotright, right, A, B);
 
   hullsortclockwise(hull);
 
