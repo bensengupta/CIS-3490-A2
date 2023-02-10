@@ -75,17 +75,14 @@ vector convexhulldivideandconquer(vector vec) {
   unsigned int minIdx = 0;
   unsigned int maxIdx = 0;
   for (unsigned int i = 1; i < vec.size; i++) {
-    if (vec.items[i].x < vec.items[minIdx].x) minIdx = i;
-    if (vec.items[i].x > vec.items[maxIdx].x) maxIdx = i;
-  }
-
-  // If all points are exactly on a vertical line
-  // Then find farthest Y points
-  if (minIdx == maxIdx) {
-    for (unsigned int i = 0; i < vec.size; i++) {
-      if (vec.items[i].y < vec.items[minIdx].y) minIdx = i;
-      if (vec.items[i].y > vec.items[maxIdx].y) maxIdx = i;
-    }
+    if (vec.items[i].x < vec.items[minIdx].x ||
+        (vec.items[i].x == vec.items[minIdx].x &&
+         vec.items[i].y < vec.items[minIdx].y))
+      minIdx = i;
+    if (vec.items[i].x > vec.items[maxIdx].x ||
+        (vec.items[i].x == vec.items[maxIdx].x &&
+         vec.items[i].y > vec.items[maxIdx].y))
+      maxIdx = i;
   }
 
   point A = vec.items[minIdx];
