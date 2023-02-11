@@ -75,44 +75,49 @@ inline double pointdistance(point a, point b) {
 }
 
 shortestpathresult shortestpath(vector points, int start, int end) {
+  point lastPoint;
   double leftlength = 0.0;
   double rightlength = 0.0;
 
   vector leftpath;
   vectorinit(&leftpath);
+
+  lastPoint = points.items[start];
+
+  for (unsigned int i = 0; i < points.size; i++) {
+    int idx = (start + points.size - i) % points.size;
+
+    point next = points.items[idx];
+
+    leftlength += pointdistance(lastPoint, next);
+    lastPoint = next;
+
+    vectoradd(&leftpath, next);
+
+    if (idx == end) break;
+  }
+
   vector rightpath;
   vectorinit(&rightpath);
 
-  bool isPathLeft = true;
-
-  point lastLeft = points.items[start];
-  point lastRight = points.items[start];
+  lastPoint = points.items[start];
 
   for (unsigned int i = 0; i < points.size; i++) {
-    int leftIdx = (start + points.size - i) % points.size;
-    int rightIdx = (start + i) % points.size;
+    int idx = (start + i) % points.size;
 
-    point left = points.items[leftIdx];
-    point right = points.items[rightIdx];
+    point next = points.items[idx];
 
-    leftlength += pointdistance(lastLeft, left);
-    rightlength += pointdistance(lastRight, right);
-    lastLeft = left;
-    lastRight = right;
+    rightlength += pointdistance(lastPoint, next);
+    lastPoint = next;
 
-    vectoradd(&leftpath, left);
-    vectoradd(&rightpath, right);
+    vectoradd(&rightpath, next);
 
-    if (leftIdx == end || rightIdx == end) {
-      if (rightIdx == end && (leftIdx != end || rightlength < leftlength))
-        isPathLeft = false;
-      break;
-    }
+    if (idx == end) break;
   }
 
   shortestpathresult res;
 
-  if (isPathLeft) {
+  if (leftlength < rightlength) {
     res.path = leftpath;
     res.pathlength = leftlength;
     vectorfree(&rightpath);
