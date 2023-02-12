@@ -22,11 +22,9 @@ ALGORITHM BruteForceInversions(A[0...n-1])
   return inversions
 ```
 
-Basic operation: comparison
+Basic operation: Comparison
 
-Repetitions: 
-
-Efficiency class:
+Repetitions: $(n-1) + (n - 2) + \dots + 2 + 1 = \frac{n(n-1)}{2} \in \Theta(n^2)$
 
 ## 1.2
 
@@ -71,21 +69,43 @@ ALGORITHM SortAndCountInversions(A[0...n-1], left, right)
     A[k] = S[k - left]
 ```
 
-Basic operation: comparison
+Basic operation: Comparison
 
-Repetitions: 
+Repetitions: (best case)
 
-(Master theorem)
+$$
+\begin{align*}
+T(n) &= 2T(\frac{n}{2}) + \frac{n}{2} \text{ and } T(1)=0 \\
+     &= 2T(2^{k - 1}) + 2^{k - 1} \tag{$n = 2^k$} \\
+     &= 2(2T(2^{k - 2}) + 2^{k - 2}) + 2^{k - 1} \\
+     &= 2^i T(2^{k - i}) + i2^{k - 1} \\
+     &= 2^k T(2^{k - k}) + k2^{k - 1} \tag{sub $i = k$} \\
+     &= 2^k T(1) + \frac{k2^k}{2} \\
+     &= 0 + \frac{k2^k}{2} \\
+     &= \frac{n \log_2 n}{2} \tag{sub $2^k = n$} \\
+     &\in \Theta(n \log n)
+\end{align*}
+$$
 
-Efficiency class:
+Master Theorem:
+
+$$
+T(n) = 2T(\frac{n}{2}) + \frac{n}{2} \text{ and } T(1)=0 \\
+f(n) = n/2 \in \Theta(n^1) \\
+a = 2, b = 2, d = 1 \\
+b^d = 2 ^ 1 = 2 = a
+$$
+
+Thus by the Master Theorem, $T(n) \in \Theta(n^1 \log n)$
 
 ## 1.3
 
-|  | Brute Force | Divide And Conquer |
-|  | ----------- | ------------------ |
-| Efficiency Class | Θ(n ^ 2) | Θ(n log n) |
-| Run time | 266 ms | 10 ms |
-
+|              | Brute Force   | Divide and Conquer |
+| ------------ | ------------- | ------------------ |
+| Best case    | $\Theta(n^2)$ | $\Theta(n \log n)$ |
+| Average case | $\Theta(n^2)$ | $\Theta(n \log n)$ |
+| Worst case   | $\Theta(n^2)$ | $\Theta(n \log n)$ |
+| Runtime      | 266 ms        | 10 ms              |
 
 ## 2.1
 
@@ -95,7 +115,7 @@ ALGORITHM ShortestPath(P[0...n - 1], s1, s2)
   // s1 and s2 are indices of two points in P
   // Returns the points in the shortest path from s1 to s2 in P
   // and the length of the path
-  
+
   initialize list L
   leftLength = 0
   lastPoint = s1
@@ -140,7 +160,7 @@ ALGORITHM HullSortClockwise(H[0...n - 1])
 
   for i = 0 to n - 1 do
     A[i] = atan2(H[i].y - lowest.y, H[i].x - lowest.x)
-  
+
   Sort H using values in A
 
 ALGORITHM BruteForceConvexHull(S[0...n - 1])
@@ -195,6 +215,7 @@ ALGORITHM BruteForceConvexHull(S[0...n - 1])
 ```
 
 The algorithm to solve the shortest path around problem consists of two steps:
+
 - Finding the points in the convex hull of S
 - Traversing the convex hull to determine the shortest path from s1 to s2
 
@@ -202,25 +223,20 @@ The algorithm to solve the shortest path around problem consists of two steps:
 
 Basic operation: Comparison
 
-Repetitions: 
+Repetitions:
 
-Efficiency class: Θ(n ^ 3)
-
-### Hull Sort Clockwise
-
-Basic operation: Comparison
-
-Repetitions: 
-
-Efficiency class: Θ(n log n)
+$$
+\begin{align*}
+& n^3 + n^2\text{ (remove duplicates)} + n \log n\text{ (clockwise sort)} \\
+&\in \Theta(n^3)
+\end{align*}
+$$
 
 ### Shortest Path
 
-Basic operation: 
+Basic operation: Addition
 
-Repetitions: 
-
-Efficiency class: Θ(n)
+Repetitions: $n \in \Theta(n)$
 
 ## 2.2
 
@@ -283,7 +299,7 @@ ALGORITHM DivideAndConquerConvexHull(S[0...n - 1])
 
   add A and B to H
   remove A and B from S
-  
+
   // Divide S into S1: points to the left of the line
   //           and S2: points to the right of the line
   p = Partition(S, A, B)
@@ -302,16 +318,40 @@ ALGORITHM DivideAndConquerConvexHull(S[0...n - 1])
 
 Basic operation: Comparison
 
-Repetitions: 
+Repetitions: (best case)
 
-Efficiency class: Θ(n log n)
+$$
+\begin{align*}
+T(n) &= 2T(\frac{n}{2}) + n \text{ and } T(1)=0 \\
+     &= 2T(2^{k - 1}) + 2^k \tag{$n = 2^k$} \\
+     &= 2(2T(2^{k - 2}) + 2^{k - 1}) + 2^k \\
+     &= 2^i T(2^{k - i}) + i2^k \\
+     &= 2^k T(2^{k - k}) + k2^k \tag{sub $i = k$} \\
+     &= 2^k T(1) + k2^k \\
+     &= 0 + k2^k \\
+     &= n \log_2 n \tag{sub $2^k = n$} \\
+     &\in \Theta(n \log n)
+\end{align*}
+$$
 
-### Hull Sort Clockwise
+Master Theorem:
 
-Same as 2.1
+$$
+T(n) = 2T(\frac{n}{2}) + n \text{ and } T(1)=0 \\
+f(n) = n \in \Theta(n^1) \\
+a = 2, b = 2, d = 1 \\
+b^d = 2 ^ 1 = 2 = a
+$$
+
+Thus by the Master Theorem, $T(n) \in \Theta(n^1 \log n)$
 
 ### Shortest Path
 
 Same as 2.1
 
-
+|              | Brute Force   | Divide and Conquer |
+| ------------ | ------------- | ------------------ |
+| Best case    | $\Theta(n^3)$ | $\Theta(n \log n)$ |
+| Average case | $\Theta(n^3)$ | $\Theta(n \log n)$ |
+| Worst case   | $\Theta(n^3)$ | $\Theta(n^2)$      |
+| Runtime      | 14581 ms      | 1 ms               |
