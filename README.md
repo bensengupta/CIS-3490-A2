@@ -16,6 +16,8 @@ date: 2023-02-11
 # Build executables
 make release
 
+# move data_A2_Q1.txt and data_A2_Q2.txt to working directory
+
 # 1.1 Counting Inversions Brute Force
 # NOTE: filename will be prompted
 ./bin/P11
