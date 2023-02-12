@@ -1,3 +1,10 @@
+/**
+ * CIS3490 - Assignment 2
+ * Author: Benjamin Sengupta
+ * ID: 1188767
+ * Date: 2023-Feb-11
+ */
+
 #include "../include/P2utils.h"
 #include "../include/utils.h"
 
@@ -10,6 +17,7 @@ unsigned int partition(vector *vec, unsigned int left, unsigned int right,
                        point p1, point p2) {
   if (left == right) return left;
 
+  // Calculate line equation
   double a = p2.y - p1.y;
   double b = p1.x - p2.x;
   double c = p1.x * p2.y - p1.y * p2.x;
@@ -19,6 +27,7 @@ unsigned int partition(vector *vec, unsigned int left, unsigned int right,
   for (unsigned int i = left; i < right; i++) {
     point p3 = vec->items[i];
 
+    // If p3 is to the left or on the line
     if (a * p3.x + b * p3.y < c + DOUBLE_ERROR) {
       // Swap points[i] and points[fill]
       vec->items[i] = vec->items[fill];
@@ -53,7 +62,6 @@ void findhull(vector *hull, vector *vec, unsigned int left, unsigned int right,
   right--;
   vectoradd(hull, p3);
 
-  // S1 = vec[p:right]
   unsigned int pivot1 = partition(vec, left, right, p1, p3);
   unsigned int pivot2 = partition(vec, left, pivot1, p3, p2);
   findhull(hull, vec, pivot1, right, p1, p3);

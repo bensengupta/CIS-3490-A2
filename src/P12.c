@@ -1,3 +1,10 @@
+/**
+ * CIS3490 - Assignment 2
+ * Author: Benjamin Sengupta
+ * ID: 1188767
+ * Date: 2023-Feb-11
+ */
+
 #include "../include/P1utils.h"
 #include "../include/utils.h"
 

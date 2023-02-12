@@ -1,3 +1,10 @@
+/**
+ * CIS3490 - Assignment 2
+ * Author: Benjamin Sengupta
+ * ID: 1188767
+ * Date: 2023-Feb-11
+ */
+
 #include "../include/P2utils.h"
 
 #include <math.h>
@@ -13,10 +20,17 @@
 inline bool doubleeq(double x1, double x2) {
   return fabs(x1 - x2) < DOUBLE_ERROR;
 }
+
 inline bool pointeq(point p1, point p2) {
   return doubleeq(p1.x, p2.x) && doubleeq(p1.y, p2.y);
 }
 
+inline double pointdistance(point a, point b) {
+  return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+}
+
+// Point with additional angle value
+// This struct is exclusively used for quicksort
 typedef struct pointwithangle {
   point point;
   double angle;
@@ -70,15 +84,12 @@ typedef struct shortestpathresult {
   vector path;
 } shortestpathresult;
 
-inline double pointdistance(point a, point b) {
-  return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
-}
-
 shortestpathresult shortestpath(vector points, int start, int end) {
   point lastPoint;
   double leftlength = 0.0;
   double rightlength = 0.0;
 
+  // ======== Left path ========
   vector leftpath;
   vectorinit(&leftpath);
 
@@ -89,14 +100,18 @@ shortestpathresult shortestpath(vector points, int start, int end) {
 
     point next = points.items[idx];
 
+    // Add distance to path length
     leftlength += pointdistance(lastPoint, next);
     lastPoint = next;
 
+    // Add next point to path
     vectoradd(&leftpath, next);
 
+    // Stop if end reached
     if (idx == end) break;
   }
 
+  // ======== Right path ========
   vector rightpath;
   vectorinit(&rightpath);
 
@@ -107,11 +122,14 @@ shortestpathresult shortestpath(vector points, int start, int end) {
 
     point next = points.items[idx];
 
+    // Add distance to path length
     rightlength += pointdistance(lastPoint, next);
     lastPoint = next;
 
+    // Add next point to path
     vectoradd(&rightpath, next);
 
+    // Stop if end reached
     if (idx == end) break;
   }
 
@@ -184,14 +202,17 @@ unsigned int promptpointindex(vector points) {
   double y = -1;
 
   while (true) {
+    // Prompt for string
     printf("> ");
     readline(buffer);
 
+    // If scanf fails, print error and prompt again
     if (sscanf(buffer, "%lf %lf", &x, &y) != 2) {
       printf("error: invalid input\n");
       continue;
     }
 
+    // Check that point exists
     bool foundPoint = false;
     point p = {x, y};
 
@@ -203,11 +224,13 @@ unsigned int promptpointindex(vector points) {
       }
     }
 
+    // If point was not found, then print error and prompt again
     if (!foundPoint) {
       printf("error: failed to find point\n");
       continue;
     }
 
+    // If all above checks passed, break and return index of point
     break;
   }
 
